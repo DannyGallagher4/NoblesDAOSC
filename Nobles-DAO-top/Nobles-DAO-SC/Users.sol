@@ -3,13 +3,18 @@ pragma solidity >=0.8.2 <0.9.0;
 contract Users{
 
     address[] public validAddresses;
+    address public chairperson;
 
-
-    function addValidAddress() public {
-        validAddresses.push(msg.sender);
+    constructor() {
+        chairperson = msg.sender;
     }
 
-    function getValidAddresses() public view returns (address[]){
+    function addValidAddress(address newValid) public {
+        require(msg.sender == chairperson);
+        validAddresses.push(newValid);
+    }
+
+    function getValidAddresses() public view returns (address[] memory){
         return validAddresses;
     }
 
