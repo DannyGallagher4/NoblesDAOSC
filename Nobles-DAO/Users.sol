@@ -11,6 +11,9 @@ contract Users{
 
     function addValidAddress(address newValid) public {
         require(msg.sender == chairperson);
+        for(uint i = 0; i < validAddresses.length; i++){
+            require(newValid != validAddresses[i]);
+        }
         validAddresses.push(newValid);
     }
 
