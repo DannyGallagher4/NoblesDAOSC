@@ -31,6 +31,12 @@ contract Users{
         teachers.push(newTeacher);
     }
 
+    function addAdminAddress(address newAdmin) public {
+        require(containsAddress(admins, msg.sender));
+        require(!containsAddress(admins, newAdmin));
+        admins.push(newAdmin);
+    }
+
     function getStudentAddresses() public view returns (address[] memory){
         return students;
     }
