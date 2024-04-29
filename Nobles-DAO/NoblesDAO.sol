@@ -1,10 +1,25 @@
 pragma solidity >=0.8.2 <0.9.0;
 
-contract Users{
+contract NoblesDAO{
 
     address[] public students;
     address[] public teachers;
     address[] public admins;
+
+    uint counter = 1;
+
+    struct Choice{
+        string option;
+        address[] votes;
+    }
+
+    struct Poll{
+        uint id;
+        string name;
+        Choice[] choices;
+    }
+
+    Poll[] activePolls;
 
     constructor() {
         admins.push(msg.sender);
@@ -43,6 +58,30 @@ contract Users{
 
     function getTeacherAddresses() public view returns (address[] memory){
         return teachers;
+    }
+
+    function createPoll(address originalCaller, string memory question, string[] memory options) public {
+        require(containsAddress(teachers, originalCaller));
+        Choice[] memory myChoices = new Choice[](options.length);
+        for(uint i = 0; i < options.length; i++){
+            address[] memory myaddr;
+            myChoices[i] = Choice(options[i], myaddr);
+        }
+        activePolls.push(Poll(counter, question, myChoices));
+        counter++;
+    }
+
+    function vote(address originalCaller, uint pollId, uint optionIndex) public{
+        require(containsAddress(students, originalCaller));
+        for(uint i = 0; i < activePolls.length; i++){
+            if(activePolls[i].id == pollId){
+                for(uint j = 0; j < activePolls[i].choices.length; j++){
+                    require(!containsAddress(activePolls[i].choices[j].votes, originalCaller), "User already voted");
+                }
+                activePolls[i].choices[optionIndex].votes.push(originalCaller);
+                break;
+            }
+        }
     }
 
 }
