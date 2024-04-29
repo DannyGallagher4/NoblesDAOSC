@@ -20,6 +20,7 @@ contract NoblesDAO{
     }
 
     Poll[] activePolls;
+    Poll[] inactivePolls;
 
     constructor() {
         admins.push(msg.sender);
@@ -70,6 +71,19 @@ contract NoblesDAO{
         activePolls.push(Poll(counter, question, myChoices));
         counter++;
     }
+    
+    function deletePoll(address originalCaller, uint pollid) public { 
+        require(containsAddress(teachers, originalCaller)); 
+        for (uint p = 0; p < activePolls.length; p++) {
+            if (activePolls[p].id == pollid) {
+                inactivePolls.push(activePolls[p]);
+                activePolls[p] = activePolls[activePolls.length - 1]; 
+                activePolls.pop(); 
+                return; 
+            }
+        }
+    }
+
 
     function vote(address originalCaller, uint pollId, uint optionIndex) public{
         require(containsAddress(students, originalCaller));
