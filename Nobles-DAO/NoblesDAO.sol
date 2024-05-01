@@ -98,4 +98,9 @@ contract NoblesDAO{
         }
     }
 
+    function viewPolls(address originalCaller) public view returns (Poll[] memory) {
+        require(containsAddress(students, originalCaller) || containsAddress(teachers, originalCaller) || containsAddress(admins, originalCaller));
+        return activePolls;
+    }
+
 }
