@@ -5,6 +5,7 @@ import "./NoblesStorage.sol";
 contract NoblesDAO{
 
     uint counter = 1;
+    address admin;
 
     struct Choice{
         string option;
@@ -21,7 +22,7 @@ contract NoblesDAO{
     Poll[] inactivePolls;
 
     constructor() {
-        admins.push(msg.sender);
+        admin = msg.sender;
     }
 
     function containsAddress(address[] memory myArray, address _value) public pure returns (bool){
