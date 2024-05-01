@@ -4,10 +4,6 @@ import "./NoblesStorage.sol";
 
 contract NoblesDAO{
 
-    address[] public students;
-    address[] public teachers;
-    address[] public admins;
-
     uint counter = 1;
 
     struct Choice{
@@ -55,14 +51,6 @@ contract NoblesDAO{
         admins.push(newAdmin);
     }
 
-    function getStudentAddresses() public view returns (address[] memory){
-        return students;
-    }
-
-    function getTeacherAddresses() public view returns (address[] memory){
-        return teachers;
-    }
-
     function createPoll(address originalCaller, string memory question, string[] memory options) public {
         require(containsAddress(teachers, originalCaller));
         Choice[] memory myChoices = new Choice[](options.length);
@@ -85,7 +73,6 @@ contract NoblesDAO{
             }
         }
     }
-
 
     function vote(address originalCaller, uint pollId, uint optionIndex) public{
         require(containsAddress(students, originalCaller));
