@@ -62,10 +62,10 @@ contract NoblesDAO{
         counter++;
     }
     
-    function deletePoll(address originalCaller, uint pollid) public { 
+    function deletePoll(address originalCaller, uint pollId) public { 
         require(containsAddress(teachers, originalCaller)); 
         for (uint p = 0; p < activePolls.length; p++) {
-            if (activePolls[p].id == pollid) {
+            if (activePolls[p].id == pollId) {
                 inactivePolls.push(activePolls[p]);
                 activePolls[p] = activePolls[activePolls.length - 1]; 
                 activePolls.pop(); 

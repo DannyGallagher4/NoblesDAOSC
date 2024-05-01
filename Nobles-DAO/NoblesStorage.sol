@@ -28,5 +28,16 @@ contract NoblesStorage{
     function getAdminAddresses() public view returns (address[] memory){
         return admins;
     }
+    
+    function addStudentAddresses(address student) public {
+        students.push(student);
+    }
 
+    function addTeacherAddresses(address teacher) public {
+        students.push(teacher);
+    }
+
+    function addAdminAddresses(address admin) public {
+        students.push(admin);
+    }
 }
