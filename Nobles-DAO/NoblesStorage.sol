@@ -1,4 +1,4 @@
-contract NoblesDAO{
+contract NoblesStorage{
     struct Choice{
         string option;
         address[] votes;
