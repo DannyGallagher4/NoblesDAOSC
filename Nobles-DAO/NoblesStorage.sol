@@ -40,4 +40,28 @@ contract NoblesStorage{
     function addAdminAddresses(address admin) public {
         admins.push(admin);
     }
+
+    function getActivePolls() public view returns (Poll[] memory){
+        return activePolls;
+    }
+
+    function getInactivePolls() public view returns (Poll[] memory){
+        return inactivePolls;
+    }
+
+    function addActivePoll(Poll memory newPoll) public {
+        activePolls.push(newPoll);
+    }
+
+    function popActivePoll() public {
+        activePolls.pop();
+    }
+
+    function addInactivePoll(Poll memory newPoll) public {
+        inactivePolls.push(newPoll);
+    }
+
+    function addVote(uint pollIndex, uint choiceIndex, address originalCaller) public {
+        activePolls[pollIndex].choices[choiceIndex].votes.push(originalCaller);
+    }
 }

@@ -52,44 +52,44 @@ contract NoblesDAO{
     }
 
     function createPoll(address originalCaller, string memory question, string[] memory options) public {
-        require(containsAddress(teachers, originalCaller));
+        require(containsAddress(noblesStorage.getTeacherAddresses(), originalCaller));
         Choice[] memory myChoices = new Choice[](options.length);
         for(uint i = 0; i < options.length; i++){
             address[] memory myaddr;
             myChoices[i] = Choice(options[i], myaddr);
         }
-        activePolls.push(Poll(counter, question, myChoices));
+        noblesStorage.addActivePoll(Poll(counter, question, myChoices));
         counter++;
     }
     
     function deletePoll(address originalCaller, uint pollId) public { 
-        require(containsAddress(teachers, originalCaller)); 
-        for (uint p = 0; p < activePolls.length; p++) {
-            if (activePolls[p].id == pollId) {
-                inactivePolls.push(activePolls[p]);
-                activePolls[p] = activePolls[activePolls.length - 1]; 
-                activePolls.pop(); 
+        require(containsAddress(noblesStorage.getTeacherAddresses(), originalCaller)); 
+        for (uint p = 0; p < noblesStorage.getActivePolls().length; p++) {
+            if (noblesStorage.getActivePolls()[p].id == pollId) {
+                noblesStorage.addInactivePoll(noblesStorage.getActivePolls()[p]);
+                noblesStorage.getActivePolls()[p] = noblesStorage.getActivePolls()[noblesStorage.getActivePolls().length - 1]; 
+                noblesStorage.popActivePoll();
                 return; 
             }
         }
     }
 
     function vote(address originalCaller, uint pollId, uint optionIndex) public{
-        require(containsAddress(students, originalCaller));
-        for(uint i = 0; i < activePolls.length; i++){
-            if(activePolls[i].id == pollId){
-                for(uint j = 0; j < activePolls[i].choices.length; j++){
-                    require(!containsAddress(activePolls[i].choices[j].votes, originalCaller), "User already voted");
+        require(containsAddress(noblesStorage.getStudentAddresses(), originalCaller));
+        for(uint i = 0; i < noblesStorage.getActivePolls().length; i++){
+            if(noblesStorage.getActivePolls()[i].id == pollId){
+                for(uint j = 0; j < noblesStorage.getActivePolls()[i].choices.length; j++){
+                    require(!containsAddress(noblesStorage.getActivePolls()[i].choices[j].votes, originalCaller), "User already voted");
                 }
-                activePolls[i].choices[optionIndex].votes.push(originalCaller);
+                noblesStorage.addVote(i, optionIndex, originalCaller);
                 break;
             }
         }
     }
 
     function viewPolls(address originalCaller) public view returns (Poll[] memory) {
-        require(containsAddress(students, originalCaller) || containsAddress(teachers, originalCaller) || containsAddress(admins, originalCaller));
-        return activePolls;
+        require(containsAddress(noblesStorage.getStudentAddresses(), originalCaller) || containsAddress(noblesStorage.getTeacherAddresses(), originalCaller) || containsAddress(noblesStorage.getAdminAddresses(), originalCaller));
+        return noblesStorage.getActivePolls();
     }
 
 }
