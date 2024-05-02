@@ -34,10 +34,10 @@ contract NoblesStorage{
     }
 
     function addTeacherAddresses(address teacher) public {
-        students.push(teacher);
+        teachers.push(teacher);
     }
 
     function addAdminAddresses(address admin) public {
-        students.push(admin);
+        admins.push(admin);
     }
 }

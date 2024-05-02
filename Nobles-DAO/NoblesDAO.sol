@@ -6,6 +6,7 @@ contract NoblesDAO{
 
     uint counter = 1;
     address admin;
+    NoblesStorage public noblesStorage;
 
     struct Choice{
         string option;
@@ -18,11 +19,9 @@ contract NoblesDAO{
         Choice[] choices;
     }
 
-    Poll[] activePolls;
-    Poll[] inactivePolls;
-
-    constructor() {
+    constructor(address _noblesStorageAddress) {
         admin = msg.sender;
+        noblesStorage = NoblesStorage(_noblesStorageAddress);
     }
 
     function containsAddress(address[] memory myArray, address _value) public pure returns (bool){
@@ -35,21 +34,21 @@ contract NoblesDAO{
     }
 
     function addStudentAddress(address newStudent) public {
-        require(containsAddress(admins, msg.sender));
-        require(!containsAddress(students, newStudent));
-        students.push(newStudent);
+        require(containsAddress(noblesStorage.getAdminAddresses(), msg.sender));
+        require(!containsAddress(noblesStorage.getStudentAddresses(), newStudent));
+        noblesStorage.addStudentAddresses(newStudent);
     }
 
     function addTeacherAddress(address newTeacher) public {
-        require(containsAddress(admins, msg.sender));
-        require(!containsAddress(teachers, newTeacher));
-        teachers.push(newTeacher);
+        require(containsAddress(noblesStorage.getAdminAddresses(), msg.sender));
+        require(!containsAddress(noblesStorage.getTeacherAddresses(), newTeacher));
+        noblesStorage.addTeacherAddresses(newTeacher);
     }
 
     function addAdminAddress(address newAdmin) public {
-        require(containsAddress(admins, msg.sender));
-        require(!containsAddress(admins, newAdmin));
-        admins.push(newAdmin);
+        require(containsAddress(noblesStorage.getAdminAddresses(), msg.sender));
+        require(!containsAddress(noblesStorage.getAdminAddresses(), newAdmin));
+        noblesStorage.addAdminAddresses(newAdmin);
     }
 
     function createPoll(address originalCaller, string memory question, string[] memory options) public {
