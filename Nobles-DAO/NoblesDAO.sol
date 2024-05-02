@@ -53,12 +53,12 @@ contract NoblesDAO{
 
     function createPoll(address originalCaller, string memory question, string[] memory options) public {
         require(containsAddress(noblesStorage.getTeacherAddresses(), originalCaller));
-        Choice[] memory myChoices = new Choice[](options.length);
+        NoblesStorage.Choice[] memory myChoices = new NoblesStorage.Choice[](options.length);
         for(uint i = 0; i < options.length; i++){
             address[] memory myaddr;
-            myChoices[i] = Choice(options[i], myaddr);
+            myChoices[i] = NoblesStorage.Choice(options[i], myaddr);
         }
-        noblesStorage.addActivePoll(Poll(counter, question, myChoices));
+        noblesStorage.addActivePoll(NoblesStorage.Poll(counter, question, myChoices));
         counter++;
     }
     
@@ -87,7 +87,7 @@ contract NoblesDAO{
         }
     }
 
-    function viewPolls(address originalCaller) public view returns (Poll[] memory) {
+    function viewPolls(address originalCaller) public view returns (NoblesStorage.Poll[] memory) {
         require(containsAddress(noblesStorage.getStudentAddresses(), originalCaller) || containsAddress(noblesStorage.getTeacherAddresses(), originalCaller) || containsAddress(noblesStorage.getAdminAddresses(), originalCaller));
         return noblesStorage.getActivePolls();
     }
