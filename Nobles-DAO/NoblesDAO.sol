@@ -67,9 +67,9 @@ contract NoblesDAO{
         for (uint p = 0; p < noblesStorage.getActivePolls().length; p++) {
             if (noblesStorage.getActivePolls()[p].id == pollId) {
                 noblesStorage.addInactivePoll(noblesStorage.getActivePolls()[p]);
-                noblesStorage.getActivePolls()[p] = noblesStorage.getActivePolls()[noblesStorage.getActivePolls().length - 1]; 
+                noblesStorage.setActivePollIndex(p, noblesStorage.getActivePolls()[noblesStorage.getActivePolls().length - 1]);
                 noblesStorage.popActivePoll();
-                return; 
+                return;
             }
         }
     }

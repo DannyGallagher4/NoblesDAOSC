@@ -14,8 +14,8 @@ contract NoblesStorage{
     address[] public teachers;
     address[] public admins;
 
-    Poll[] activePolls;
-    Poll[] inactivePolls;
+    Poll[] public activePolls;
+    Poll[] public inactivePolls;
 
     function getStudentAddresses() public view returns (address[] memory){
         return students;
@@ -43,6 +43,10 @@ contract NoblesStorage{
 
     function getActivePolls() public view returns (Poll[] memory){
         return activePolls;
+    }
+
+    function setActivePollIndex(uint idx, Poll memory newValue) public{
+        activePolls[idx] = newValue;
     }
 
     function getInactivePolls() public view returns (Poll[] memory){

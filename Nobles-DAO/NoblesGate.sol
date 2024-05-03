@@ -6,24 +6,22 @@ contract NoblesGate{
 
     address admin;
     address NoblesDAOAddr;
-    mapping(string => function(address) external) public functionMap;
-    mapping(string => bool) public isFunctionRegistered;
-    string[] funcNames = ["addStudentAddress", "addTeacherAddress", "addAdminAddress", "createPoll", "vote"];
-
+    
     constructor(address contractAddr){
         admin = msg.sender;
         NoblesDAOAddr = contractAddr;
-        for(uint i = 0; i < funcNames.length; i++){
-            functionMap["addStudentAddress"] = NoblesDAO(NoblesDAOAddr).addStudentAddress;
-            isFunctionRegistered["addStudentAddress"] = true;
-        }
-
     }
 
-    function callFunc(string memory functionName) public{
-        require(msg.sender == admin);
-        require(isFunctionRegistered[functionName], "Function not registered");
-        functionMap[functionName](admin);
+    fallback() external {
+        address _impl = NoblesDAOAddr;
+        assembly {
+            calldatacopy(0, 0, calldatasize())
+            let result := delegatecall(gas(), _impl, 0, calldatasize(), 0, 0)
+            returndatacopy(0, 0, returndatasize())
+            switch result
+            case 0 { revert(0, returndatasize()) }
+            default { return(0, returndatasize()) }
+        }
     }
 
     function updateAddr(address newAddr) public{
