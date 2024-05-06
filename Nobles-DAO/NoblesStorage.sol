@@ -1,14 +1,18 @@
-contract NoblesStorage{
-    struct Choice{
-        string option;
-        address[] votes;
-    }
+pragma solidity ^0.8.19;
 
-    struct Poll{
-        uint id;
-        string name;
-        Choice[] choices;
-    }
+// struct Choice{
+//     string option;
+//     address[] votes;
+// }
+
+struct Poll{
+    uint id;
+    string name;
+    string[] options;
+    address[][] votes;
+}
+
+contract NoblesStorage{
 
     address[] public students;
     address[] public teachers;
@@ -66,6 +70,6 @@ contract NoblesStorage{
     }
 
     function addVote(uint pollIndex, uint choiceIndex, address originalCaller) public {
-        activePolls[pollIndex].choices[choiceIndex].votes.push(originalCaller);
+        activePolls[pollIndex].votes[choiceIndex].push(originalCaller);
     }
 }

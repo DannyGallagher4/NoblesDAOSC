@@ -8,17 +8,6 @@ contract NoblesDAO{
     address admin;
     NoblesStorage public noblesStorage;
 
-    struct Choice{
-        string option;
-        address[] votes;
-    }
-
-    struct Poll{
-        uint id;
-        string name;
-        Choice[] choices;
-    }
-
     constructor(address _noblesStorageAddress) {
         admin = msg.sender;
         noblesStorage = NoblesStorage(_noblesStorageAddress);
@@ -53,12 +42,12 @@ contract NoblesDAO{
 
     function createPoll(address originalCaller, string memory question, string[] memory options) public {
         require(containsAddress(noblesStorage.getTeacherAddresses(), originalCaller));
-        NoblesStorage.Choice[] memory myChoices = new NoblesStorage.Choice[](options.length);
+        mapping(uint => NoblesStorage.Choice) memory myChoices;
         for(uint i = 0; i < options.length; i++){
             address[] memory myaddr;
             myChoices[i] = NoblesStorage.Choice(options[i], myaddr);
         }
-        noblesStorage.addActivePoll(NoblesStorage.Poll(counter, question, myChoices));
+        noblesStorage.addActivePoll(NoblesStorage.Poll(counter, question, myChoices, options.length));
         counter++;
     }
     
