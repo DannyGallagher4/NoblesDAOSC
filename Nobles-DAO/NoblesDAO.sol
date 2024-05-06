@@ -76,12 +76,12 @@ contract NoblesDAO{
         }
     }
 
-    function viewPolls(address originalCaller) public view returns (NoblesStorage.Poll[] memory) {
+    function viewPolls(address originalCaller) public view returns (Poll[] memory) {
         require(containsAddress(noblesStorage.getStudentAddresses(), originalCaller) || containsAddress(noblesStorage.getTeacherAddresses(), originalCaller) || containsAddress(noblesStorage.getAdminAddresses(), originalCaller));
         return noblesStorage.getActivePolls();
     }
 
-    function viewCertainPolls(address originalCaller, uint pollId) public view returns (NoblesStorage.Poll memory) {
+    function viewCertainPolls(address originalCaller, uint pollId) public view returns (Poll memory) {
         require(containsAddress(noblesStorage.getStudentAddresses(), originalCaller) || containsAddress(noblesStorage.getTeacherAddresses(), originalCaller) || containsAddress(noblesStorage.getAdminAddresses(), originalCaller));
         for (uint i = 0; i < noblesStorage.getActivePolls().length; i++){
             if (noblesStorage.getActivePolls()[i].id == pollId){
