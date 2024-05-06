@@ -42,12 +42,12 @@ contract NoblesDAO{
 
     function createPoll(address originalCaller, string memory question, string[] memory options) public {
         require(containsAddress(noblesStorage.getTeacherAddresses(), originalCaller));
-        mapping(uint => NoblesStorage.Choice) memory myChoices;
-        for(uint i = 0; i < options.length; i++){
-            address[] memory myaddr;
-            myChoices[i] = NoblesStorage.Choice(options[i], myaddr);
-        }
-        noblesStorage.addActivePoll(NoblesStorage.Poll(counter, question, myChoices, options.length));
+        address[][] memory myaddrs;
+        // for(uint i = 0; i < options.length; i++){
+        //     address[] memory myaddr;
+        //     myChoices[i] = NoblesStorage.Choice(options[i], myaddr);
+        // }
+        noblesStorage.addActivePoll(Poll(counter, question, options, myaddrs));
         counter++;
     }
     
@@ -67,8 +67,8 @@ contract NoblesDAO{
         require(containsAddress(noblesStorage.getStudentAddresses(), originalCaller));
         for(uint i = 0; i < noblesStorage.getActivePolls().length; i++){
             if(noblesStorage.getActivePolls()[i].id == pollId){
-                for(uint j = 0; j < noblesStorage.getActivePolls()[i].choices.length; j++){
-                    require(!containsAddress(noblesStorage.getActivePolls()[i].choices[j].votes, originalCaller), "User already voted");
+                for(uint j = 0; j < noblesStorage.getActivePolls()[i].options.length; j++){
+                    require(!containsAddress(noblesStorage.getActivePolls()[i].votes[j], originalCaller), "User already voted");
                 }
                 noblesStorage.addVote(i, optionIndex, originalCaller);
                 break;
