@@ -81,4 +81,15 @@ contract NoblesDAO{
         return noblesStorage.getActivePolls();
     }
 
+    function viewCertainPolls(address originalCaller, uint pollId) public view returns (NoblesStorage.Poll memory) {
+        require(containsAddress(noblesStorage.getStudentAddresses(), originalCaller) || containsAddress(noblesStorage.getTeacherAddresses(), originalCaller) || containsAddress(noblesStorage.getAdminAddresses(), originalCaller));
+        for (uint i = 0; i < noblesStorage.getActivePolls().length; i++){
+            if (noblesStorage.getActivePolls()[i].id == pollId){
+                return noblesStorage.getActivePolls()[i];
+            }
+        }
+        revert("Poll not found.");
+    }
+    
+
 }
