@@ -7,10 +7,12 @@ contract NoblesDAO{
     uint counter = 1;
     address admin;
     NoblesStorage public noblesStorage;
+    address NoblesStorageAddr;
 
     constructor(address _noblesStorageAddress) {
         admin = msg.sender;
         noblesStorage = NoblesStorage(_noblesStorageAddress);
+        NoblesStorageAddr = _noblesStorageAddress;
     }
 
     fallback() external {
