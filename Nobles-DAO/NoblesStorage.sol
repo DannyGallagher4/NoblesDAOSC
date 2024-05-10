@@ -21,6 +21,10 @@ contract NoblesStorage{
     Poll[] public activePolls;
     Poll[] public inactivePolls;
 
+    constructor(){
+        admins.push(0x5B38Da6a701c568545dCfcB03FcB875f56beddC4);
+    }
+
     function getStudentAddresses() public view returns (address[] memory){
         return students;
     }
