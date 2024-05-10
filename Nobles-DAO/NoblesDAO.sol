@@ -13,6 +13,18 @@ contract NoblesDAO{
         noblesStorage = NoblesStorage(_noblesStorageAddress);
     }
 
+    fallback() external {
+        address storageCon = NoblesStorageAddr;
+        assembly {
+            calldatacopy(0, 0, calldatasize())
+            let result := delegatecall(gas(), storageCon, 0, calldatasize(), 0, 0)
+            returndatacopy(0, 0, returndatasize())
+            switch result
+            case 0 { revert(0, returndatasize()) }
+            default { return(0, returndatasize()) }
+        }
+    }
+
     function containsAddress(address[] memory myArray, address _value) public pure returns (bool){
         for (uint i = 0; i < myArray.length; i++) {
             if (myArray[i] == _value) {
