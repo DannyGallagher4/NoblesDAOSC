@@ -56,7 +56,7 @@ contract NoblesDAO{
 
     function createPoll(address originalCaller, string memory question, string[] memory options) public {
         require(containsAddress(noblesStorage.getTeacherAddresses(), originalCaller));
-        address[][] memory myaddrs;
+        address[][] memory myaddrs = new address[][](options.length);
         noblesStorage.addActivePoll(Poll(counter, question, options, myaddrs));
         counter++;
     }
