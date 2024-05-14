@@ -36,6 +36,11 @@ contract NoblesDAO{
         return false;
     }
 
+    function updateAddr(address newAddr) public{
+        require(containsAddress(noblesStorage.getAdminAddresses(), msg.sender));
+        NoblesStorageAddr = newAddr;
+    }
+
     function addStudentAddress(address newStudent) public {
         require(containsAddress(noblesStorage.getAdminAddresses(), msg.sender));
         require(!containsAddress(noblesStorage.getStudentAddresses(), newStudent));
